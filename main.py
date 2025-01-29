@@ -47,8 +47,6 @@ def parse_llm_output(llm_text):
     llm_text = llm_text.replace(" ", "").replace("\n", "")
     parts = llm_text.split("|")  # e.g. ["polynomial","[1,-3,5,-1]","-2","5"]
 
-    print("Split by '|':", parts)
-
     if len(parts) < 3:
         return None
 
@@ -163,10 +161,10 @@ def main():
         )
 
         llm_answer = response.choices[0].message.content.strip()
-        print(f"LLM raw output: {llm_answer}")
+        if '```' in llm_answer:
+            llm_answer = llm_answer.strip('```')
 
         parsed = parse_llm_output(llm_answer)
-        print("parsed:", parsed)
 
         if parsed == "exit":
             print("LLM indicated the session has ended.")
@@ -176,7 +174,6 @@ def main():
         else:
             print("Could not parse the LLM response. Please try again.")
 
-    print("Session closed.")
 
 if __name__ == "__main__":
     main()
